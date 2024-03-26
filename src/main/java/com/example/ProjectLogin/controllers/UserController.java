@@ -3,9 +3,11 @@ package com.example.ProjectLogin.controllers;
 import com.example.ProjectLogin.models.UserModel;
 import com.example.ProjectLogin.repositories.UserRepository;
 import com.example.ProjectLogin.responses.ApiResponse;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
+    @Autowired
+    private EntityManager entityManager;
     @Autowired
     private UserRepository userRepository;
 
@@ -64,24 +68,29 @@ public class UserController {
         }
     }
 
+    @Transactional
     @PutMapping("/updateUser")  // Update User by Username
-    public String updateUser(@RequestBody UserModel userModel) {
+    public ResponseEntity<ApiResponse> updateUser(@RequestBody UserModel userModel) {
         try {
             Optional<UserModel> userOptional = userRepository.findByUsername(userModel.getUsername());
             if (userOptional.isPresent()) {
                 userRepository.updateUserDetails(userModel.getUsername(), userModel.getFirstName(), userModel.getLastName(), userModel.getPassword());
-                UserModel user = userOptional.get();
-                String userDetails = "Id: " + user.getId() +
-                        ", \nUsername: " + user.getUsername() +
-                        ", \nFirst Name: " + user.getFirstName() +
-                        ", \nLast Name: " + user.getLastName() +
-                        ", \nPhone Number: " + user.getPhoneNumber();
-                return userDetails;
+                UserModel updatedUser = userRepository.findByUsername(userModel.getUsername()).orElse(null);
+                entityManager.refresh(updatedUser);
+                if (updatedUser != null) {
+                    return ResponseEntity.status(HttpStatus.OK)
+                            .body(new ApiResponse("User Updated", true, updatedUser));
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(new ApiResponse("Failed to fetch updated user details", false, null));
+                }
             } else {
-                return "User Not Found";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse("User Not Found", false, null));
             }
         } catch (Exception e) {
-            return e.toString();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(e.toString(), false, null));
         }
     }
 

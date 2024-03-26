@@ -38,10 +38,6 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUser(@RequestBody UserModel userModel) {
         try {
             Optional<UserModel> userOptional = userRepository.findByUsername(userModel.getUsername());
-            //                if (userOptional.isPresent()) {
-            //                    UserModel user = userOptional.get();
-            //                    return ResponseEntity.status(HttpStatus.OK)
-            //                            .body(new ApiResponse("User Found", true, user));
             return userOptional.map(model -> ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse("User Found", true, model))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse("User Not Found", false, null)));
@@ -94,7 +90,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/deleteUser")
+    @DeleteMapping("/deleteUser")   //Delete User By Username
     public ResponseEntity<ApiResponse> deleteUser(@RequestBody UserModel userModel) {
         try {
             Optional<UserModel> userOptional= userRepository.findByUsername(userModel.getUsername());

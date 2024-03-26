@@ -12,8 +12,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository <UserModel, Integer> {
 
     Optional<UserModel> findByUsername(String username);
-    @Query(value="SELECT * FROM USERS", nativeQuery = true)
-    List<UserModel> getAllUsers();
+
+    List<UserModel> findAll();
+//    @Query(value="SELECT * FROM USERS", nativeQuery = true)
+//    List<UserModel> getAllUsers();
 
     @Modifying
     @Transactional

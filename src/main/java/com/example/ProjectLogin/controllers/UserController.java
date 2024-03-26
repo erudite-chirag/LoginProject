@@ -43,30 +43,24 @@ public class UserController {
                     .body(new ApiResponse("User Not Found", false, null)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(e.toString(), false, userModel));
+                    .body(new ApiResponse(e.toString(), false, null));
         }
     }
 
     @GetMapping("/getAllUsers") //Get All Users
-    public String getAllUsers() {
+    public ResponseEntity<ApiResponse> getAllUsers() {
         try {
-            List<UserModel> allUsers = userRepository.getAllUsers();
-            if(allUsers.isEmpty()){
-                return "No User Found";
+            List<UserModel> userList = userRepository.findAll();
+            if(!userList.isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse("Found Users", true, userList));
             }else{
-                StringBuilder userDetails = new StringBuilder();
-                for (UserModel user : allUsers) {
-                    userDetails.append("Id: ").append(user.getId())
-                            .append(", Username: ").append(user.getUsername())
-                            .append(", First Name: ").append(user.getFirstName())
-                            .append(", Last Name: ").append(user.getLastName())
-                            .append(", Phone Number: ").append(user.getPhoneNumber())
-                            .append("\n");
-                }
-                return userDetails.toString();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse("No User Found", false, null));
             }
         } catch (Exception e) {
-            return e.toString();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(e.toString(), false, null));
         }
     }
 

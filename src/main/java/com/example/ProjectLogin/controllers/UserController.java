@@ -2,11 +2,12 @@ package com.example.ProjectLogin.controllers;
 
 import com.example.ProjectLogin.models.UserModel;
 import com.example.ProjectLogin.repositories.UserRepository;
-import org.apache.catalina.User;
+import com.example.ProjectLogin.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @RequestMapping("/api")
@@ -17,32 +18,32 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/createUser")     //Create User
-    public String createUser(@RequestBody UserModel userModel) {
+    public Object createUser(@RequestBody UserModel userModel) {
         try {
             userRepository.save(userModel);
-            return "User Created.";
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse("User Created Successfully", true, userModel));
+//            return "User Created.";
         } catch (Exception e) {
-            return e.toString();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(e.toString(), false, null));
         }
     }
 
     @PostMapping("/getUser")   //Get Single User by Username
-    public String getUser(@RequestBody UserModel userModel) {
+    public ResponseEntity<ApiResponse> getUser(@RequestBody UserModel userModel) {
         try {
             Optional<UserModel> userOptional = userRepository.findByUsername(userModel.getUsername());
-            if (userOptional.isPresent()) {
-                UserModel user = userOptional.get();
-                String userDetails = "Id: " + user.getId() +
-                        ", \nUsername: " + user.getUsername() +
-                        ", \nFirst Name: " + user.getFirstName() +
-                        ", \nLast Name: " + user.getLastName() +
-                        ", \nPhone Number: " + user.getPhoneNumber();
-                return userDetails;
-            } else {
-                return "User Not Found";
-            }
+            //                if (userOptional.isPresent()) {
+            //                    UserModel user = userOptional.get();
+            //                    return ResponseEntity.status(HttpStatus.OK)
+            //                            .body(new ApiResponse("User Found", true, user));
+            return userOptional.map(model -> ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse("User Found", true, model))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse("User Not Found", false, null)));
         } catch (Exception e) {
-            return e.toString();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(e.toString(), false, userModel));
         }
     }
 
@@ -74,10 +75,6 @@ public class UserController {
         try {
             Optional<UserModel> userOptional = userRepository.findByUsername(userModel.getUsername());
             if (userOptional.isPresent()) {
-//                user.setFirstName(userModel.getFirstName());
-//                user.setLastName(userModel.getLastName());
-//                user.setPassword(userModel.getPassword());
-//                userRepository.save(user);  // Save the updated user
                 userRepository.updateUserDetails(userModel.getUsername(), userModel.getFirstName(), userModel.getLastName(), userModel.getPassword());
                 UserModel user = userOptional.get();
                 String userDetails = "Id: " + user.getId() +

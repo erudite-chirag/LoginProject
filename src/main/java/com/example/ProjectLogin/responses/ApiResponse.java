@@ -10,7 +10,7 @@ public class ApiResponse {
     private final boolean success;
     private final Object data;
 
-    ApiResponse(String message, boolean success, Object data){
+    public ApiResponse(String message, boolean success, Object data){
         this.message= message;
         this.success=success;
         this.data=data;

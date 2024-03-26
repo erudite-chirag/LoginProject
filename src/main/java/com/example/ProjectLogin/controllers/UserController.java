@@ -95,20 +95,23 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser")
-    public String deleteUser(@RequestBody UserModel userModel) {
+    public ResponseEntity<ApiResponse> deleteUser(@RequestBody UserModel userModel) {
         try {
             Optional<UserModel> userOptional= userRepository.findByUsername(userModel.getUsername());
             System.out.println(userOptional);
             if(userOptional.isPresent()){
                 UserModel user = userOptional.get();
                 userRepository.deleteByUsername(user.getUsername());
-                return "Sucessfully Deleted";
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse("User Deleted Successfully", true, null));
             }
             else{
-                return "User Not Found";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse("User Not Found", false, null));
             }
         } catch (Exception e) {
-            return e.toString();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(e.toString(), false, null));
         }
     }
 }

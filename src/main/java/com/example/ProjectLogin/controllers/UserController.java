@@ -74,11 +74,12 @@ public class UserController {
         try {
             Optional<UserModel> userOptional = userRepository.findByUsername(userModel.getUsername());
             if (userOptional.isPresent()) {
+//                user.setFirstName(userModel.getFirstName());
+//                user.setLastName(userModel.getLastName());
+//                user.setPassword(userModel.getPassword());
+//                userRepository.save(user);  // Save the updated user
+                userRepository.updateUserDetails(userModel.getUsername(), userModel.getFirstName(), userModel.getLastName(), userModel.getPassword());
                 UserModel user = userOptional.get();
-                user.setFirstName(userModel.getFirstName());
-                user.setLastName(userModel.getLastName());
-                user.setPassword(userModel.getPassword());
-                userRepository.save(user);  // Save the updated user
                 String userDetails = "Id: " + user.getId() +
                         ", \nUsername: " + user.getUsername() +
                         ", \nFirst Name: " + user.getFirstName() +

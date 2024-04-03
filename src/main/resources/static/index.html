@@ -3,40 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup Page</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Signup or Login</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
 
 <div class="container" style="padding:50px">
-    <form id="signup-form">
-        <h2>Sign Up</h2>
-        <div class="form-control">
-            <label for="username">Username</label>
-            <input type="text" id="username" style="padding-right:0px" name="username" required>
-        </div>
-        <div class="form-control">
-            <label for="firstname">First Name</label>
-            <input type="text" id="firstname" style="padding-right:0px" name="firstName" required>
-        </div>
-        <div class="form-control">
-            <label for="lastname">Last Name</label>
-            <input type="text" id="lastname" style="padding-right:0px" name="lastName" required>
-        </div>
-        <div class="form-control">
-            <label for="phonenumber">Phone Number</label>
-            <input type="tel" id="phonenumber" style="padding-right:0px" name="phoneNumber" required>
-<!--            <small>Format: 123-456-7890</small>-->
-        </div>
-        <div class="form-control">
-            <label for="password">Password</label>
-            <input type="password" id="password" style="padding-right:0px" name="password" required>
-        </div>
-        <button type="submit">Sign Up</button>
-        <button type="reset">Reset</button>
-    </form>
+    <h2>Welcome!</h2>
+    <button onclick="window.location.href = './pages/signup.html';">Sign Up</button>
+    <button onclick="window.location.href = './pages/login.html';">Login</button>
 </div>
 
-<script src="./pages/signup.js"></script>
 </body>
 </html>
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Signup Page</title>-->
+<!--    <link rel="stylesheet" href="assets/css/style.css">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container" style="padding:50px">-->
+<!--    <form id="signup-form">-->
+<!--        <h2>Sign Up</h2>-->
+<!--        <div class="form-control">-->
+<!--            <label for="username">Username</label>-->
+<!--            <input type="text" id="username" style="padding-right:0px" name="username" required>-->
+<!--        </div>-->
+<!--        <div class="form-control">-->
+<!--            <label for="firstname">First Name</label>-->
+<!--            <input type="text" id="firstname" style="padding-right:0px" name="firstName" required>-->
+<!--        </div>-->
+<!--        <div class="form-control">-->
+<!--            <label for="lastname">Last Name</label>-->
+<!--            <input type="text" id="lastname" style="padding-right:0px" name="lastName" required>-->
+<!--        </div>-->
+<!--        <div class="form-control">-->
+<!--            <label for="phonenumber">Phone Number</label>-->
+<!--            <input type="tel" id="phonenumber" style="padding-right:0px" name="phoneNumber" required>-->
+<!--&lt;!&ndash;            <small>Format: 123-456-7890</small>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <div class="form-control">-->
+<!--            <label for="password">Password</label>-->
+<!--            <input type="password" id="password" style="padding-right:0px" name="password" required>-->
+<!--        </div>-->
+<!--        <button type="submit">Sign Up</button>-->
+<!--        <button type="reset">Reset</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<script src="scripts/signup.js"></script>-->
+<!--</body>-->
+<!--</html>-->

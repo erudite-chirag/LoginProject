@@ -1,6 +1,7 @@
 package com.example.ProjectLogin.repositories;
 
 import com.example.ProjectLogin.models.UserModel;
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +15,6 @@ public interface UserRepository extends JpaRepository <UserModel, Integer> {
     Optional<UserModel> findByUsername(String username);
 
     List<UserModel> findAll();
-//    @Query(value="SELECT * FROM USERS", nativeQuery = true)
-//    List<UserModel> getAllUsers();
 
     @Modifying
     @Transactional
@@ -25,4 +24,7 @@ public interface UserRepository extends JpaRepository <UserModel, Integer> {
     @Modifying
     @Transactional
     void deleteByUsername(String username);
+
+//    @Query(value="SELECT password FROM users WHERE username = u.username", nativeQuery = true)
+    Optional<UserModel> findPasswordByUsername(String username);
 }
